@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\E-Wallet-App.Core\E-Wallet-App.Core.csproj" />
+    <ProjectReference Include="..\E-Wallet-App.Domain\E-Wallet-App.Domain.csproj" />
+    <ProjectReference Include="..\E-Wallet-App.Entity\E-Wallet-App.Entity.csproj" />
+  </ItemGroup>
+
+</Project>

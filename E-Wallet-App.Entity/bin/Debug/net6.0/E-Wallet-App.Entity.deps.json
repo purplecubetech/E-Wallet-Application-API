@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "E-Wallet-App.Entity/1.0.0": {
+        "runtime": {
+          "E-Wallet-App.Entity.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "E-Wallet-App.Entity/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
