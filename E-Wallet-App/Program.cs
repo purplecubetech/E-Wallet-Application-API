@@ -8,12 +8,15 @@ using E_WalletApp.CORE.Interface.RepoInterface;
 using E_WalletApp.CORE.Service;
 using E_WalletApp.DB.Context;
 using E_WalletRepository.Repository;
+using EmailService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Configuration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +36,14 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletLogic, WalletLogic>();
-builder.Services.AddScoped<ITransLogic, TransLogic >();
+builder.Services.AddScoped<ITransLogic, TransLogic>();
+builder.Services.AddScoped<IESender, EmailSender>();
 builder.Services.AddDbContextPool<ApplicationContext>(options => options.UseSqlite("Data source =E-WalletDatabase"));
+//var emailconfig = builder.Configuration
+//   .GetSection("EmailCOnfiguration")
+//   .Get<EmailConfiguration>();
+//builder.Services.AddSingleton(emailconfig);
+builder.Services.AddSingleton(builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 builder.Services.AddSwaggerGen(options => {
 
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -68,7 +77,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -5,13 +5,15 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E-Wallet-App", "E-Wallet-App\E-Wallet-App.csproj", "{1F5FC589-20A8-4C89-84ED-C1D92D851D1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E-Wallet-App.Domain", "E-Wallet-App.Domain\E-Wallet-App.Domain.csproj", "{930DB70E-9847-495D-BAB2-274083277488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E-Wallet-App.Domain", "E-Wallet-App.Domain\E-Wallet-App.Domain.csproj", "{930DB70E-9847-495D-BAB2-274083277488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E-Wallet-App.Core", "E-Wallet-App.Core\E-Wallet-App.Core.csproj", "{615967B9-E370-4149-9383-2C39994E0B34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E-Wallet-App.Core", "E-Wallet-App.Core\E-Wallet-App.Core.csproj", "{615967B9-E370-4149-9383-2C39994E0B34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E-Wallet-App.Entity", "E-Wallet-App.Entity\E-Wallet-App.Entity.csproj", "{6090708E-964B-4A7E-AC07-A3F34BE24234}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E-Wallet-App.Entity", "E-Wallet-App.Entity\E-Wallet-App.Entity.csproj", "{6090708E-964B-4A7E-AC07-A3F34BE24234}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{47AD1302-64D6-42E2-845D-F85DC45DDBD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{47AD1302-64D6-42E2-845D-F85DC45DDBD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{6A5F2145-5635-449A-82EA-C2DFCE43E563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{47AD1302-64D6-42E2-845D-F85DC45DDBD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47AD1302-64D6-42E2-845D-F85DC45DDBD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47AD1302-64D6-42E2-845D-F85DC45DDBD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A5F2145-5635-449A-82EA-C2DFCE43E563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A5F2145-5635-449A-82EA-C2DFCE43E563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A5F2145-5635-449A-82EA-C2DFCE43E563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A5F2145-5635-449A-82EA-C2DFCE43E563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
