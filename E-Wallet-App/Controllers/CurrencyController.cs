@@ -3,6 +3,8 @@ using E_Wallet_App.Core.Interface;
 using E_Wallet_App.Entity.Dtos;
 using E_WalletApp.CORE.Interface.RepoInterface;
 using E_WalletRepository.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
@@ -11,7 +13,8 @@ using System.Text.Json;
 namespace E_Wallet_App.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize(Roles = "user")]
+    [Authorize (Roles = "admin")]
     public class CurrencyController : ControllerBase
     {
         private ITransLogic _transLogic;
@@ -33,12 +36,12 @@ namespace E_Wallet_App.Controllers
                     return NotFound("wallet does not exist");
                 }
                 var bal = await _transLogic.GetBalance(walletid, currency);
-                return bal;
-                // new BalanceDto 
-                //{
-                //    WalletId = bal.WalletId,
-                //    Balance = bal.Balance
-                //};
+                var balance = new BalanceDto 
+                {
+                    WalletId = bal.WalletId,
+                    Balance = bal.Balance
+                };
+                return balance;
             }
             catch (Exception ex)
             {

@@ -46,7 +46,7 @@ namespace E_WalletApp.CORE.Service
                 return false;
             }
         }
-        public async Task<string> Generatetoken(string email)
+        public async Task<string> Generatetoken(string email, string role)
         {
             try
             {
@@ -57,6 +57,7 @@ namespace E_WalletApp.CORE.Service
                 List<Claim> myclaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Role, role.ToLower() ),
             };
                 var token = new JwtSecurityToken(
                     claims: myclaims,

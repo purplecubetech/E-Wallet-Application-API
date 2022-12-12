@@ -16,6 +16,8 @@ namespace E_Wallet_App.Domain.Dtos
         [StringLength(60, ErrorMessage = "Name can't be longer than 60 characters")]
         public string LastName { get; set; }
         [Required]
+        public string Role { get; set; }
+        [Required]
         public string EmailAddress { get; set; }
         [Required(ErrorMessage = "password must contain an UPPERCASE, LOWERCASE, NUMBER  characters")]
         public string Password { get; set; }

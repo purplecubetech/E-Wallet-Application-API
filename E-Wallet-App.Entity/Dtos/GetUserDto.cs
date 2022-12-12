@@ -15,5 +15,6 @@ namespace E_Wallet_App.Entity.Dtos
         public DateTime DOB { get; set; }
         public DateTime DateCreated { get; set; }
         public string Gender { get; set; }
+        public string Role { get; set; }
     }
 }

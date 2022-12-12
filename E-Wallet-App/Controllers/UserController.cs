@@ -68,7 +68,7 @@ namespace E_Wallet_App.Controllers
         public async Task<ActionResult> VerifyUser([FromForm]string token)
         {
             var user = await _unitOfWork.User.FindByCondition(u => u.VerificationToken== token);
-            if(user != null)
+            if(user == null)
             {
                 return BadRequest("user not verified");
             }
@@ -123,7 +123,7 @@ namespace E_Wallet_App.Controllers
                     user.DOB = users.DOB;
                     user.Gender = users.Gender;
                     user.DateCreated = users.DateCreated;
-
+                    user.Role= users.Role;
                     getAllUserDto.Add(user);
                 }
                 

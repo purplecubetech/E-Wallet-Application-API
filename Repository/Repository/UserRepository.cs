@@ -19,7 +19,7 @@ namespace E_WalletRepository.Repository
        
         public async Task<User> GetByEmail(string email)
         {
-           var user = _applicationContext.users.FirstOrDefault(x => x.EmailAddress == email);
+           var user = _applicationContext.users.FirstOrDefault(x => x.EmailAddress == email.ToLower());
             if(user == null)
             {
                 return null;

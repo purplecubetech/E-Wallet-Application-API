@@ -12,6 +12,6 @@ namespace E_WalletApp.CORE.Interface
     {
        void  CreatepasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
         Task<bool> VerifypasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
-        Task<string> Generatetoken(string email);
+        Task<string> Generatetoken(string email, string role);    
     }
 }
