@@ -1,4 +1,5 @@
-﻿using E_WalletApp.CORE.Interface.RepoInterface;
+﻿using E_Wallet_App.Core.Interface;
+using E_WalletApp.CORE.Interface.RepoInterface;
 using E_WalletApp.DB.Context;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace E_WalletRepository.Repository
     public class UnitOfWork: IUnitOfWork
     {
         private ApplicationContext _applicationContext;
+        private readonly ILoggerManager _logger;
         private IUserRepository _user;
         private IWalletRepository _wallet;
         private ITransactionRepository _transaction;
@@ -49,13 +51,26 @@ namespace E_WalletRepository.Repository
             }
         }
 
-        public UnitOfWork(ApplicationContext applicationContext)
+        public UnitOfWork(ILoggerManager logger, ApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
+            _logger = logger;
         }
         public void Complete()
         {
-            _applicationContext.SaveChanges();
+            try
+            {
+                _applicationContext.SaveChanges();
+            }
+            catch (Exception ex) 
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+            }
         }
     }
 }

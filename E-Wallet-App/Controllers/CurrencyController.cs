@@ -14,16 +14,17 @@ namespace E_Wallet_App.Controllers
 {
     [Route("api/[controller]")]
     [ApiController, Authorize(Roles = "user")]
-    [Authorize (Roles = "admin")]
     public class CurrencyController : ControllerBase
     {
         private ITransLogic _transLogic;
         private IWalletRepository _walletRepository;
+        private readonly ILoggerManager _logger;
 
-        public CurrencyController(ITransLogic transLogic, IWalletRepository walletRepository)
+        public CurrencyController(ITransLogic transLogic, IWalletRepository walletRepository, ILoggerManager logger)
         {
             _transLogic = transLogic;
             _walletRepository = walletRepository;
+            _logger = logger;
         }
         [HttpGet("CurrencyConverter")]
         public async Task<ActionResult<BalanceDto>> GetWalletBalance(string walletid, string currency)
@@ -41,11 +42,17 @@ namespace E_Wallet_App.Controllers
                     WalletId = bal.WalletId,
                     Balance = bal.Balance
                 };
-                return balance;
+                return Ok(balance);
             }
             catch (Exception ex)
             {
-               return StatusCode(500, ex.Message);
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                return StatusCode(500, ex.Message);
             }
         }
     }

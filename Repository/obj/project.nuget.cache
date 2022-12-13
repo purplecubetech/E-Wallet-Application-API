@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "VlEH8dwRLL+XMDYdaBCVuEucXCZfFerbKbUnKlYaZ94851scnexr51Kvr5S9Umen5Iwy2lAOCBc36SlnxhpYNQ==",
+  "dgSpecHash": "JK6DrKrxll0C7khzVDsGsNMJa1hI4jiTscZPLW78Y4OkKZs1EzMS1Sz9EmPKrMAxg0nS2nAIo6CweY3uwB227Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\E-Wallet-App\\E-Wallet-Application-API\\Repository\\Repository.csproj",
   "expectedPackageFiles": [
@@ -30,6 +30,7 @@
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.25.1\\microsoft.identitymodel.tokens.6.25.1.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\nlog\\5.1.0\\nlog.5.1.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.2\\sqlitepclraw.bundle_e_sqlite3.2.1.2.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\sqlitepclraw.core\\2.1.2\\sqlitepclraw.core.2.1.2.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.2\\sqlitepclraw.lib.e_sqlite3.2.1.2.nupkg.sha512",

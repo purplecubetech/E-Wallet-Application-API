@@ -5,8 +5,10 @@ using E_Wallet_App.Domain.Models;
 using E_Wallet_App.Entity.Dtos;
 using E_WalletApp.CORE.Interface.RepoInterface;
 using E_WalletRepository.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace E_Wallet_App.Controllers
 {
@@ -17,20 +19,21 @@ namespace E_Wallet_App.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWalletLogic _wallet;
         private readonly IWalletRepository _walletRepository;
-        private readonly ITransactionRepository _transactionRepository;
         private readonly ITransLogic _transLogic;
+        private readonly ILoggerManager _logger;
 
-        public TransactionController(IUnitOfWork unitOfWork, IWalletLogic wallet, IWalletRepository walletRepository, ITransactionRepository transactionRepository, ITransLogic transLogic)
+        public TransactionController(IUnitOfWork unitOfWork, IWalletLogic wallet, IWalletRepository walletRepository, ITransLogic transLogic, ILoggerManager logger)
         {
             _unitOfWork = unitOfWork;
             _wallet = wallet;
             _walletRepository = walletRepository;
-            _transactionRepository = transactionRepository;
             _transLogic = transLogic;
-
+            _logger = logger;
         }
 
         [HttpPost("Deposit")]
+        [Authorize(Roles = "user")]
+
         public async Task<ActionResult<TransDto>> Deposite([FromForm]TransDto transDto)
         {
             try
@@ -50,10 +53,18 @@ namespace E_Wallet_App.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
                 return StatusCode(500, ex.Message);
             }
         }
         [HttpPost("Withdrawal")]
+        [Authorize(Roles = "user")]
+
         public async Task<ActionResult<TransDto>> Withdrawal([FromForm]TransDto transDto)
         {
             try
@@ -73,10 +84,18 @@ namespace E_Wallet_App.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
                 return StatusCode(500, ex.Message);
             }
         }
         [HttpPost("Transfer")]
+        [Authorize(Roles = "user")]
+
         public async Task<ActionResult<TransDto>> Transfer([FromForm]TransferDto transferDto)
         {
             try
@@ -101,10 +120,18 @@ namespace E_Wallet_App.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
                 return StatusCode(500, ex.Message);
             }
         }
         [HttpGet("GetAllTransactions")]
+        [Authorize(Roles = "admin")]
+
         public async Task<ActionResult> GetTransactions()
         {
             try
@@ -118,10 +145,18 @@ namespace E_Wallet_App.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
                 return StatusCode(500, ex.Message);
             }
         }
         [HttpGet("GetTransactionByWalletId")]
+        [Authorize(Roles = "user")]
+
         public async Task<ActionResult> GetTransByWalletId(string walletId)
         {
             try
@@ -136,6 +171,12 @@ namespace E_Wallet_App.Controllers
             }
             catch(Exception ex)
             {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
                 return StatusCode(500, ex.Message);
             }
         }

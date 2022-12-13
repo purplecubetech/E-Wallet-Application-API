@@ -264,6 +264,19 @@
           "lib/netstandard1.0/_._": {}
         }
       },
+      "NLog/5.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.IdentityModel.Tokens.Jwt/6.25.1": {
         "type": "package",
         "dependencies": {
@@ -849,6 +862,30 @@
         "runtime.json"
       ]
     },
+    "NLog/5.1.0": {
+      "sha512": "oW7ekrkRG9okpDMUcEglunWj8Qf2RY8qkgl+/chJoavzg3dbT13y32t19R54FKkmq80fKzw4ZekZkCrRGanKgQ==",
+      "type": "package",
+      "path": "nlog/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/net46/NLog.dll",
+        "lib/net46/NLog.xml",
+        "lib/netstandard1.3/NLog.dll",
+        "lib/netstandard1.3/NLog.xml",
+        "lib/netstandard1.5/NLog.dll",
+        "lib/netstandard1.5/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "nlog.5.1.0.nupkg.sha512",
+        "nlog.nuspec"
+      ]
+    },
     "System.IdentityModel.Tokens.Jwt/6.25.1": {
       "sha512": "0ypg2Vj2gSm7guuO152Y4kVCyLQ4aZyakAogmZlmB3M5QZTDUW0wjXzKafqAtFBzw+pGWH0bFAfH2FyNt7Uo6A==",
       "type": "package",
@@ -1178,6 +1215,7 @@
       "Microsoft.Extensions.Configuration.Abstractions >= 7.0.0",
       "Microsoft.Extensions.Http >= 7.0.0",
       "Microsoft.IdentityModel.Tokens >= 6.25.1",
+      "NLog >= 5.1.0",
       "System.IdentityModel.Tokens.Jwt >= 6.25.1"
     ]
   },
@@ -1241,6 +1279,10 @@
           "Microsoft.IdentityModel.Tokens": {
             "target": "Package",
             "version": "[6.25.1, )"
+          },
+          "NLog": {
+            "target": "Package",
+            "version": "[5.1.0, )"
           },
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",

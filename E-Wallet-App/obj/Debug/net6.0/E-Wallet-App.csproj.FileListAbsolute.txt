@@ -213,3 +213,5 @@ C:\Users\HP\source\repos\E-Wallet-App\E-Wallet-Application-API\E-Wallet-App\bin\
 C:\Users\HP\source\repos\E-Wallet-App\E-Wallet-Application-API\E-Wallet-App\bin\Debug\net6.0\EmailService.dll
 C:\Users\HP\source\repos\E-Wallet-App\E-Wallet-Application-API\E-Wallet-App\bin\Debug\net6.0\EmailService.pdb
 C:\Users\HP\source\repos\E-Wallet-App\E-Wallet-Application-API\E-Wallet-App\obj\Debug\net6.0\E-Wallet-App.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\HP\source\repos\E-Wallet-App\E-Wallet-Application-API\E-Wallet-App\bin\Debug\net6.0\NLog.config
+C:\Users\HP\source\repos\E-Wallet-App\E-Wallet-Application-API\E-Wallet-App\bin\Debug\net6.0\NLog.dll
