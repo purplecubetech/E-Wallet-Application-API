@@ -9,6 +9,5 @@ namespace E_WalletApp.CORE.Interface.RepoInterface
 {
     public interface ITransactionRepository : IRepositoryBase<Transaction>
     {
-        //Task<Transaction> GetByTransaction(string transType);
     }
 }

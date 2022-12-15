@@ -9,7 +9,6 @@ namespace E_WalletApp.CORE.Interface.RepoInterface
 {
     public interface IWalletRepository : IRepositoryBase<Wallet>
     {
-        Task<Wallet> GetByWalletId(string email);
 
     }
 }

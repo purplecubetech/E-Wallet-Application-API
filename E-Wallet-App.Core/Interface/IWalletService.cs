@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E_Wallet_App.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace E_Wallet_App.Core.Interface
 {
     public interface IWalletService
     {
-        Task<string> GenerateWallet();
+        Task<Wallet> GetWalledById(string walletid);
+            
     }
 }

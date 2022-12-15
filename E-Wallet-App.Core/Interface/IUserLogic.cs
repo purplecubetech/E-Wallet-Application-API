@@ -10,11 +10,11 @@ namespace E_WalletApp.CORE.Interface
 {
     public interface IUserLogic
     {
-        Task<bool> Login(string email, string password);
-       // Task<bool> Logout();
-        Task<User> RegisterUser(Register register);
-        Task<Wallet> CreateWallet();
         Task<string> ForgetPassword(string email);
-        Task<bool> ResetPassword(string email, string login);
+        Task<bool> ResetPassword(string email, string password);
+        Task<string> Login(string email, string password);
+        Task<string> Generatetoken(string email, string role);
+        void CreatepasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
+        Task<bool> VerifypasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
     }
 }

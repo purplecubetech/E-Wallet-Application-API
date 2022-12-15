@@ -15,14 +15,14 @@ namespace E_Wallet_App.Core.Core
 {
     public class TransLogic: ITransLogic
     {
-        private IWalletRepository _walletRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IWalletService _walletService;
+        private readonly IUnitOfWork _unitOfWork;
         private IHttpClientFactory _httpClientFactory;
         private ILoggerManager _logger;
 
-        public TransLogic(IWalletRepository walletRepository, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, ILoggerManager logger) 
+        public TransLogic(IWalletService walletService, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, ILoggerManager logger) 
         {
-            _walletRepository = walletRepository;
+            _walletService = walletService;
             _unitOfWork = unitOfWork;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
@@ -32,7 +32,7 @@ namespace E_Wallet_App.Core.Core
             try
             {
                 bool check = true;
-                var wallet = await _walletRepository.GetByWalletId(transDto.WalletId);
+                var wallet = await _walletService.GetWalledById(transDto.WalletId);
                 if (wallet == null)
                 {
                     check = false;
@@ -74,7 +74,7 @@ namespace E_Wallet_App.Core.Core
             {
                 bool check = true;
                 bool balcheck = false;
-                var wallet = await _walletRepository.GetByWalletId(transDto.WalletId);
+                var wallet = await _walletService.GetWalledById(transDto.WalletId);
                 if (wallet != null)
                 {
                     if (wallet.Balance < transDto.amount)
@@ -116,8 +116,8 @@ namespace E_Wallet_App.Core.Core
         {
             try
             {
-                var fromWallet = await _walletRepository.GetByWalletId(transferDto.FromWallet);
-                var toWallet = await _walletRepository.GetByWalletId(transferDto.ToWallet);
+                var fromWallet = await _walletService.GetWalledById(transferDto.FromWallet);
+                var toWallet = await _walletService.GetWalledById(transferDto.ToWallet);
                 if (fromWallet != null && toWallet != null)
                 {
                     if (fromWallet.Balance < transferDto.Amount)
@@ -175,7 +175,7 @@ namespace E_Wallet_App.Core.Core
         {
             try
             {
-                var wallet = await _walletRepository.GetByWalletId(walletid);
+                var wallet = await _walletService.GetWalledById(walletid);
                 if (wallet == null)
                 {
                     return new BalanceDto();

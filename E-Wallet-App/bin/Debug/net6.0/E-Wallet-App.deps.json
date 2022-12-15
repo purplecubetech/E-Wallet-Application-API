@@ -73,6 +73,33 @@
           }
         }
       },
+      "Microsoft.Diagnostics.Tracing.TraceEvent/3.0.6": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Dia2Lib.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          },
+          "lib/netstandard2.0/Microsoft.Diagnostics.FastSerialization.dll": {
+            "assemblyVersion": "3.0.6.0",
+            "fileVersion": "3.0.6.0"
+          },
+          "lib/netstandard2.0/Microsoft.Diagnostics.Tracing.TraceEvent.dll": {
+            "assemblyVersion": "3.0.6.0",
+            "fileVersion": "3.0.6.0"
+          },
+          "lib/netstandard2.0/OSExtensions.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/netstandard2.0/TraceReloggerLib.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
       "Microsoft.EntityFrameworkCore/7.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Abstractions": "7.0.0",
@@ -802,6 +829,7 @@
       "E-Wallet-App.Core/1.0.0": {
         "dependencies": {
           "E-Wallet-App.Entity": "1.0.0",
+          "Microsoft.Diagnostics.Tracing.TraceEvent": "3.0.6",
           "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
           "Microsoft.Extensions.Http": "7.0.0",
           "Microsoft.IdentityModel.Tokens": "6.25.1",
@@ -907,6 +935,13 @@
       "sha512": "sha512-WC7SANtaFTmQ/WPyhrE96h88MrH28C7kTBenDf5Eo+IR6CbWM0Uw2pR2++tyYr3qe/zSIsIYroEupB1mLg/adw==",
       "path": "microsoft.data.sqlite.core/7.0.0",
       "hashPath": "microsoft.data.sqlite.core.7.0.0.nupkg.sha512"
+    },
+    "Microsoft.Diagnostics.Tracing.TraceEvent/3.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CuSe3xRd5Rr0X6xXtxjtyKgLVapPr5dUX11so2a5QlG1j8LQ8YSB0qrume1tKvVRnly/WnxgpoeFqhn8QbefRA==",
+      "path": "microsoft.diagnostics.tracing.traceevent/3.0.6",
+      "hashPath": "microsoft.diagnostics.tracing.traceevent.3.0.6.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/7.0.0": {
       "type": "package",

@@ -10,6 +10,5 @@ namespace E_WalletApp.CORE.Interface.RepoInterface
 {
     public interface IUserRepository : IRepositoryBase<User>
     {
-        Task<User> GetByEmail(string email);
     }
 }

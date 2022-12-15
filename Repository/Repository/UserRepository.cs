@@ -14,38 +14,9 @@ namespace E_WalletRepository.Repository
 {
     public class UserRepository : RepositoryBase<User>, IUserRepository
     {
-        private readonly ILoggerManager _logger;
 
         public UserRepository(ApplicationContext applicationContext) : base(applicationContext)
         {
-        }
-
-        public UserRepository(ILoggerManager logger, ApplicationContext applicationContext) : base(applicationContext)
-        {
-            _logger = logger;
-        }
-       
-        public async Task<User> GetByEmail(string email)
-        {
-            try
-            {
-                var user = _applicationContext.users.FirstOrDefault(x => x.EmailAddress == email.ToLower());
-                if (user == null)
-                {
-                    return null;
-                }
-                return user;
-            }
-            catch(Exception ex) {
-                _logger.Debug($"{ex.Message}");
-                _logger.Debug($"{ex.StackTrace}");
-                _logger.Error($"{ex.InnerException}");
-                _logger.Info($"{ex.GetBaseException}");
-                _logger.Warn($"{ex.GetObjectData}");
-                _logger.Fatal($"{ex.GetHashCode}");
-                return null;
-            }
-        }
-        
+        }        
     }
 }

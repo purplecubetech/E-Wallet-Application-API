@@ -11,19 +11,15 @@ namespace E_WalletRepository.Repository
         protected readonly ApplicationContext _applicationContext;
         private readonly ILoggerManager _logger;
 
-        public ApplicationContext ApplicationContext { get; }
-
-        public RepositoryBase(ApplicationContext applicationContext, ILoggerManager logger)
+        public RepositoryBase(ApplicationContext applicationContext)
         {
             _applicationContext = applicationContext;
+            
+        }
+        public RepositoryBase(ILoggerManager logger) 
+        {
             _logger = logger;
         }
-
-        protected RepositoryBase(ApplicationContext applicationContext)
-        {
-            ApplicationContext = applicationContext;
-        }
-
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             try

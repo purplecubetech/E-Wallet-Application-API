@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Rezu/WlHjbb++9EBLA4RBDGJZ5xwxNBuTYd8j/GX5GJYdjJFTVZqPm9EwkrSn3Hhz5QbUsJ/8/HflyS2+ud4mA==",
+  "dgSpecHash": "LUGVvp/BkGSynzhHbRHFBj0+biLU5SilAyCnqnUlcLgFZAsIT5MSjyDYmb57aKoxIAT7m6QxShrOu9q9QPgP1g==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\E-Wallet-App\\E-Wallet-Application-API\\EmailService\\EmailService.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\7.0.0\\microsoft.aspnetcore.identity.ui.7.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.diagnostics.tracing.traceevent\\3.0.6\\microsoft.diagnostics.tracing.traceevent.3.0.6.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",

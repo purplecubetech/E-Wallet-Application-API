@@ -1,5 +1,7 @@
 ﻿using E_Wallet_App.Domain.Dtos;
 using E_Wallet_App.Domain.Models;
+using E_Wallet_App.Entity.Dtos;
+using E_Wallet_App.Entity.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +12,9 @@ namespace E_WalletApp.CORE.Interface
 {
     public interface IUserService
     {
-       void  CreatepasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt);
-        Task<bool> VerifypasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
-        Task<string> Generatetoken(string email, string role);    
+        Task<User> GetByEmail(string email);
+        Task<GetUserDto> GetUserById(Guid id);
+        Task<PageList<GetUserDto>> GetAllUser(PaginationParameter pagin);
+        Task<User> RegisterUser(Register register);
     }
 }

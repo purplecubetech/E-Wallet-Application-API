@@ -9,6 +9,6 @@ namespace E_Wallet_App.Core.Interface
 {
     public interface IWalletLogic
     {
-        Task<Wallet> CreateWallet();
+        Task<string> GenerateWallet();
     }
 }

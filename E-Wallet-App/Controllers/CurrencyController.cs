@@ -13,25 +13,26 @@ using System.Text.Json;
 namespace E_Wallet_App.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController, Authorize(Roles = "user")]
+    [ApiController]
     public class CurrencyController : ControllerBase
     {
         private ITransLogic _transLogic;
-        private IWalletRepository _walletRepository;
+        private readonly IWalletService _walletService;
         private readonly ILoggerManager _logger;
 
-        public CurrencyController(ITransLogic transLogic, IWalletRepository walletRepository, ILoggerManager logger)
+        public CurrencyController(ITransLogic transLogic, IWalletService walletService, ILoggerManager logger)
         {
             _transLogic = transLogic;
-            _walletRepository = walletRepository;
+            _walletService = walletService;
             _logger = logger;
         }
         [HttpGet("CurrencyConverter")]
+        [Authorize(Roles = "user")]
         public async Task<ActionResult<BalanceDto>> GetWalletBalance(string walletid, string currency)
         {
             try
             {
-                var wallet = await _walletRepository.GetByWalletId(walletid);
+                var wallet = await _walletService.GetWalledById(walletid);
                 if(wallet == null)
                 {
                     return NotFound("wallet does not exist");

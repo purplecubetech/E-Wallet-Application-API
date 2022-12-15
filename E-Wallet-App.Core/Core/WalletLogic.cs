@@ -10,19 +10,13 @@ namespace E_Wallet_App.Core.Core
 {
     public class WalletLogic: IWalletLogic
     {
-        private IWalletService _wallet;
-
-        public WalletLogic(IWalletService wallet) 
+        public async Task<string> GenerateWallet()
         {
-            _wallet = wallet;
-        }
-        public async Task<Wallet> CreateWallet()
-        {
-            var wallet = new Wallet();
-            wallet.WalletId = await _wallet.GenerateWallet();
-            wallet.Date = DateTime.Now;
-            wallet.Balance = 0;
-            return wallet;
+            Guid guid = Guid.NewGuid();
+            string uniqueString = Convert.ToBase64String(guid.ToByteArray());
+            uniqueString = uniqueString.Replace("=", "");
+            uniqueString = uniqueString.Replace("+", "");
+            return uniqueString;
         }
     }
 }

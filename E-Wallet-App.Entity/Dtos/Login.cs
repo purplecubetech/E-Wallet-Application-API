@@ -14,5 +14,6 @@ namespace E_Wallet_App.Domain.Dtos
 
         [Required]
         public string Password { get; set; }
+        
     }
 }

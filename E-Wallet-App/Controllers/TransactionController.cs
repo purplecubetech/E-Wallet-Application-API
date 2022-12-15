@@ -3,11 +3,13 @@ using E_Wallet_App.Core.Interface;
 using E_Wallet_App.Domain.Dtos;
 using E_Wallet_App.Domain.Models;
 using E_Wallet_App.Entity.Dtos;
+using E_Wallet_App.Entity.Helper;
 using E_WalletApp.CORE.Interface.RepoInterface;
 using E_WalletRepository.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data;
 
 namespace E_Wallet_App.Controllers
@@ -16,17 +18,17 @@ namespace E_Wallet_App.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITransService _transService;
         private readonly IWalletLogic _wallet;
-        private readonly IWalletRepository _walletRepository;
+        private readonly IWalletService _walletService;
         private readonly ITransLogic _transLogic;
         private readonly ILoggerManager _logger;
 
-        public TransactionController(IUnitOfWork unitOfWork, IWalletLogic wallet, IWalletRepository walletRepository, ITransLogic transLogic, ILoggerManager logger)
+        public TransactionController(ITransService transService, IWalletLogic wallet, IWalletService walletService, ITransLogic transLogic, ILoggerManager logger)
         {
-            _unitOfWork = unitOfWork;
+            _transService = transService;
             _wallet = wallet;
-            _walletRepository = walletRepository;
+            _walletService = walletService;
             _transLogic = transLogic;
             _logger = logger;
         }
@@ -38,7 +40,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = await _walletRepository.GetByWalletId(transDto.WalletId);
+                var user = await _walletService.GetWalledById(transDto.WalletId);
                 if (user == null)
                 {
                     return BadRequest($"{transDto.WalletId} does not already exixts");
@@ -69,7 +71,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = await _walletRepository.GetByWalletId(transDto.WalletId);
+                var user = await _walletService.GetWalledById(transDto.WalletId);
                 if (user == null)
                 {
                     return BadRequest($"{transDto.WalletId} does not already exixts");
@@ -100,8 +102,8 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user1 = await _walletRepository.GetByWalletId(transferDto.FromWallet);
-                var user2 = await _walletRepository.GetByWalletId(transferDto.ToWallet);
+                var user1 = await _walletService.GetWalledById(transferDto.FromWallet);
+                var user2 = await _walletService.GetWalledById(transferDto.ToWallet);
                 if (user1 == null)
                 {
                     return BadRequest($"{transferDto.FromWallet} does not exixts");
@@ -130,13 +132,13 @@ namespace E_Wallet_App.Controllers
             }
         }
         [HttpGet("GetAllTransactions")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
 
-        public async Task<ActionResult> GetTransactions()
+        public async Task<ActionResult> GetAllTransactions([FromQuery]PaginationParameter pagin)
         {
             try
             {
-                var alltransactions = _unitOfWork.Transaction.GetAll();
+                var alltransactions = await _transService.GetAllTransaction(pagin);
                 if(alltransactions == null)
                 {
                     return NotFound("no transactions yet ");
@@ -157,16 +159,16 @@ namespace E_Wallet_App.Controllers
         [HttpGet("GetTransactionByWalletId")]
         [Authorize(Roles = "user")]
 
-        public async Task<ActionResult> GetTransByWalletId(string walletId)
+        public async Task<ActionResult> GetTransByWalletId([FromQuery] string walletId, PaginationParameter pagin)
         {
             try
             {
-                var transwithId = await _walletRepository.GetByWalletId(walletId);
+                var transwithId = await _walletService.GetWalledById(walletId);
                 if (transwithId == null)
                 {
                     return NotFound("wallet nnot found");
                 }
-                var trans = await _unitOfWork.Transaction .FindByCondition(x => x.WalletId == transwithId.WalletId);
+                var trans = await _transService.GetTransactionByWalledId(transwithId.WalletId, pagin);
                 return Ok(trans);
             }
             catch(Exception ex)

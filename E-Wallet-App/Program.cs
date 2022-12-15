@@ -11,12 +11,9 @@ using E_WalletRepository.Repository;
 using EmailService.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System.Configuration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +36,7 @@ builder.Services.AddScoped<IWalletService, WalletService>();
 builder.Services.AddScoped<IWalletLogic, WalletLogic>();
 builder.Services.AddScoped<ITransLogic, TransLogic>();
 builder.Services.AddScoped<IESender, EmailSender>();
+builder.Services.AddScoped<ITransService, TransService>();
 builder.Services.AddDbContextPool<ApplicationContext>(options => options.UseSqlite("Data source =E-WalletDatabase"));
 //var emailconfig = builder.Configuration
 //   .GetSection("EmailCOnfiguration")

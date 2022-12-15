@@ -2,6 +2,7 @@
 using E_Wallet_App.Domain.Dtos;
 using E_Wallet_App.Domain.Models;
 using E_Wallet_App.Entity.Dtos;
+using E_Wallet_App.Entity.Helper;
 using E_WalletApp.CORE.Core;
 using E_WalletApp.CORE.Interface;
 using E_WalletApp.CORE.Interface.RepoInterface;
@@ -9,6 +10,7 @@ using E_WalletRepository.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data;
 
 namespace E_Wallet_App.Controllers
@@ -21,20 +23,16 @@ namespace E_Wallet_App.Controllers
         private readonly IUserService _userService;
         private readonly ILoggerManager _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserRepository _userRepository;
         private readonly IUserLogic _userLogic;
-        private readonly IWalletLogic _wallet;
-        private readonly IWalletRepository _walletRepository;
+        private readonly IWalletService _walletService;
 
-        public UserController(IUserService userService,ILoggerManager logger, IWalletRepository walletRepository, IUnitOfWork unitOfWork, IUserRepository userRepository, IUserLogic userLogic, IWalletLogic wallet)
+        public UserController(IUserService userService, ILoggerManager logger, IWalletService walletService, IUnitOfWork unitOfWork, IUserLogic userLogic)
         {
             _userService = userService;
             _logger = logger;
             _unitOfWork = unitOfWork;
-            _userRepository = userRepository;
             _userLogic = userLogic;
-            _wallet = wallet;
-            _walletRepository = walletRepository;
+            _walletService = walletService;
         }
         [HttpPost("RegisterUser")]
         public async Task<ActionResult<Register>> RegisterUser([FromForm] Register register)
@@ -42,8 +40,8 @@ namespace E_Wallet_App.Controllers
             //var userName = new UserDto();
             try
             {
-                var user = await _userRepository.GetByEmail(register.EmailAddress);
-                if (user != null)
+                var user = await _userService.GetByEmail(register.EmailAddress);
+                if (user == null)
                 {
                     return BadRequest($"{register.EmailAddress} already exixts");
                 }
@@ -53,11 +51,7 @@ namespace E_Wallet_App.Controllers
                 }
                 else
                 {
-                    var output = await _userLogic.RegisterUser(register);
-                    var newwallet = await _userLogic.CreateWallet();
-                    _unitOfWork.User.Create(output);
-                    _unitOfWork.Wallet.Create(newwallet);
-                    _unitOfWork.Complete();
+                    var output = await _userService.RegisterUser(register);
                     return Ok($"{output}/n account registered");
                 }
             }
@@ -73,7 +67,7 @@ namespace E_Wallet_App.Controllers
             }
         }
         [HttpPost("verifyUser")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user")]
 
         public async Task<ActionResult> VerifyUser([FromForm]string token)
         {
@@ -108,18 +102,13 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var currentuser = await _userRepository.GetByEmail(user.Email);
-
-                if (currentuser != null)
-                {
-                    var check = await _userLogic.Login(user.Email, user.Password);
-                    if (check)
+                    var token = await _userLogic.Login(user.Email, user.Password);
+                    if (token != null)
                     {
-                        return Ok($"you are logged in");
+                        return Ok($"you are logged in/n {token}");
                     }
-                    return BadRequest("wrong password");
-                }
-                return BadRequest("wrong email");
+ 
+                return BadRequest("wrong email or password");
             }
             catch (Exception ex)
             {
@@ -133,33 +122,20 @@ namespace E_Wallet_App.Controllers
             }
         }
         [HttpGet("GetAllUser")]
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
 
-        public async Task<ActionResult> GetAllUser()
+        public async Task<ActionResult> GetAllUser([FromQuery]PaginationParameter pagin)
         {
             try
             {
-                var alluser = await _unitOfWork.User.GetAll();
+                var alluser = await _userService.GetAllUser(pagin);
                 if(alluser == null)
                 {
                     return NotFound("no user was found");
                 }
-                var getAllUserDto = new List<GetUserDto>();
-                foreach(var users in alluser)
-                {
-                    var user = new GetUserDto();
-                    user.FirstName = users.FirstName;
-                    user.LastName = users.LastName;
-                    user.EmailAddress = users.EmailAddress;
-                    user.DOB = users.DOB;
-                    user.Gender = users.Gender;
-                    user.DateCreated = users.DateCreated;
-                    user.Role= users.Role;
-                    getAllUserDto.Add(user);
-                }
-                
-                return Ok(getAllUserDto);
-            }
+
+                return Ok(alluser);
+            } 
             catch (Exception ex)
             {
                 _logger.Debug($"{ex.Message}");
@@ -178,7 +154,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = _unitOfWork.User.GetById(id);
+                var user = _userService.GetUserById(id) ;
                 if(user == null)
                 {
                     return NotFound("user not found");
@@ -203,12 +179,12 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var userwithId= await _walletRepository.GetByWalletId(walletId);
+                var userwithId= await _walletService.GetWalledById(walletId);
                 if (userwithId == null)
                 {
                     return NotFound("user not found");
                 }
-                var user = await _unitOfWork.Wallet.FindByCondition(x => x.UserId == userwithId.UserId);
+                var user = await _userService.GetUserById(userwithId.UserId);
                 return Ok(user);
             }
             catch (Exception ex)
@@ -227,7 +203,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = await _userRepository.GetByEmail(email);
+                var user = await _userService.GetByEmail(email);
                 if (user == null)
                 {
                     return BadRequest("your email does not exist");
@@ -245,6 +221,13 @@ namespace E_Wallet_App.Controllers
                 _logger.Fatal($"{ex.GetHashCode}");
                 return StatusCode(500, ex.Message);
             }
+        }
+        [HttpGet("getTrans")]
+        public async Task<IActionResult> Getall()
+        {
+            //IUnitOfWork unitOfWork = new IUnitOfWork();
+            var wallet = _unitOfWork.Wallet.GetAll();
+            return Ok( wallet );
         }
         [HttpPut("ResetPassword")]
         //UPDATE USER PASSWORD
