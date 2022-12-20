@@ -21,5 +21,6 @@ namespace E_Wallet_App.Domain.Models
         public DateTime Date { get; set; }
         [ForeignKey(nameof(Wallet))]
         public string WalletId { get; set; }
+        public Wallet Wallet { get; set; }
     }
 }

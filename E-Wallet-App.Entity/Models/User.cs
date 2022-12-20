@@ -35,6 +35,7 @@ namespace E_Wallet_App.Domain.Models
         public byte[] PasswordSalt { get; set; }
         [Required]
         public string VerificationToken { get; set; }
+        public bool IsVerified { get; set; } = false;
         public DateTime VerifiedAt { get; set; }
         public string? PasswordResetToken { get; set; }
         public DateTime ResetTokenExpires { get; set; }

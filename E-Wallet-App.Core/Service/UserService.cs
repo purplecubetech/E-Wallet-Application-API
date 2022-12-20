@@ -3,6 +3,7 @@ using E_Wallet_App.Domain.Dtos;
 using E_Wallet_App.Domain.Models;
 using E_Wallet_App.Entity.Dtos;
 using E_Wallet_App.Entity.Helper;
+using E_WalletApp.CORE.Core;
 using E_WalletApp.CORE.Interface;
 using E_WalletApp.CORE.Interface.RepoInterface;
 using Microsoft.Extensions.Configuration;
@@ -189,6 +190,25 @@ namespace E_WalletApp.CORE.Service
                 return null;
             }
         }
+        //public void DeleteAll(Guid id)
+        //{
+        //    try
+        //    {
+        //        var user = GetUserById(id);
+        //        var wallet = 
+        //        if (user != null) { }
+        //        _unitOfWork.User.Delete(user);
+        //        _unitOfWork.Wallet.DeleteRange(wallet);
+        //        _unitOfWork.Transaction.DeleteRange(transaction);
+        //        _unitOfWork.Complete();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //}
+
         public void CreatepasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -209,6 +229,8 @@ namespace E_WalletApp.CORE.Service
             {
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Role, role.ToLower()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+
             };
                 var token = new JwtSecurityToken(
                     claims: myclaims,

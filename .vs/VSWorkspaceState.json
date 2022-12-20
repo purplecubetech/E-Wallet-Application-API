@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Repository",
-    "\\Repository\\Repository"
+    "\\E-Wallet-App.Core",
+    "\\E-Wallet-App.Core\\Core",
+    "\\Repository"
   ],
-  "SelectedNode": "\\Repository\\Repository\\UnitOfWork.cs",
+  "SelectedNode": "\\E-Wallet-App.Core\\Core\\UserLogic.cs",
   "PreviewInSolutionExplorer": false
 }

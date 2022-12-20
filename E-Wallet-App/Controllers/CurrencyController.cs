@@ -32,7 +32,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var wallet = await _walletService.GetWalledById(walletid);
+                var wallet = await _walletService.GetWalledByIdAsync(walletid);
                 if(wallet == null)
                 {
                     return NotFound("wallet does not exist");

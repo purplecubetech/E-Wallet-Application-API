@@ -32,7 +32,7 @@ namespace E_Wallet_App.Core.Core
             try
             {
                 bool check = true;
-                var wallet = await _walletService.GetWalledById(transDto.WalletId);
+                var wallet = await _walletService.GetWalledByIdAsync(transDto.WalletId);
                 if (wallet == null)
                 {
                     check = false;
@@ -74,7 +74,7 @@ namespace E_Wallet_App.Core.Core
             {
                 bool check = true;
                 bool balcheck = false;
-                var wallet = await _walletService.GetWalledById(transDto.WalletId);
+                var wallet = await _walletService.GetWalledByIdAsync(transDto.WalletId);
                 if (wallet != null)
                 {
                     if (wallet.Balance < transDto.amount)
@@ -116,8 +116,8 @@ namespace E_Wallet_App.Core.Core
         {
             try
             {
-                var fromWallet = await _walletService.GetWalledById(transferDto.FromWallet);
-                var toWallet = await _walletService.GetWalledById(transferDto.ToWallet);
+                var fromWallet = await _walletService.GetWalledByIdAsync(transferDto.FromWallet);
+                var toWallet = await _walletService.GetWalledByIdAsync(transferDto.ToWallet);
                 if (fromWallet != null && toWallet != null)
                 {
                     if (fromWallet.Balance < transferDto.Amount)
@@ -175,7 +175,7 @@ namespace E_Wallet_App.Core.Core
         {
             try
             {
-                var wallet = await _walletService.GetWalledById(walletid);
+                var wallet = await _walletService.GetWalledByIdAsync(walletid);
                 if (wallet == null)
                 {
                     return new BalanceDto();

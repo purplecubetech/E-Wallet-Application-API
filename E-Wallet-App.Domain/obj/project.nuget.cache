@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sJosrcr8lQylnvcFD46uz42225CFzJLu+4MQucipwYR46aKcY1rUYC5xAib9GT3b5euhL2r/Llw8/3YPTCqTFw==",
+  "dgSpecHash": "eM27WI3Nct+Ofp0a+Iu00C3FytJfjzZE8Bqq65wcltWZqpDVOuDCy4mf68D6H5z2LG1GDdfsJ/y1u8GM+mywww==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\E-Wallet-App\\E-Wallet-Application-API\\E-Wallet-App.Domain\\E-Wallet-App.Domain.csproj",
   "expectedPackageFiles": [
@@ -35,7 +35,10 @@
     "C:\\Users\\HP\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512"
+    "C:\\Users\\HP\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.12\\microsoft.windowsdesktop.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.12\\microsoft.netcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.12\\microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512"
   ],
   "logs": []
 }

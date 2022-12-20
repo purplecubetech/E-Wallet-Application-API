@@ -49,6 +49,8 @@ namespace EWalletApp.Domain.Migrations
 
                     b.HasKey("TransactionId");
 
+                    b.HasIndex("WalletId");
+
                     b.ToTable("Transactions");
                 });
 
@@ -75,6 +77,9 @@ namespace EWalletApp.Domain.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -125,6 +130,9 @@ namespace EWalletApp.Domain.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -133,6 +141,17 @@ namespace EWalletApp.Domain.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Wallets");
+                });
+
+            modelBuilder.Entity("E_Wallet_App.Domain.Models.Transaction", b =>
+                {
+                    b.HasOne("E_Wallet_App.Domain.Models.Wallet", "Wallet")
+                        .WithMany("Transactions")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("E_Wallet_App.Domain.Models.Wallet", b =>
@@ -144,6 +163,11 @@ namespace EWalletApp.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("E_Wallet_App.Domain.Models.Wallet", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

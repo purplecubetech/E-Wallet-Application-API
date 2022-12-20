@@ -61,21 +61,35 @@ namespace E_WalletApp.CORE.Core
             }
             return null;
         }
-        public async Task<bool> ResetPassword(string email, string password)
+        public async Task<string> ResetPassword(ResetPasswordRequest request)
         {
             try
             {
-                var user = await _userService.GetByEmail(email.ToLower());
-                CreatepasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+                var checktoken = await _unitOfWork.User.FindByCondition(u => u.PasswordResetToken == request.Token);
+                var user = await _userService.GetByEmail(request.email.ToLower());
+
+                if (checktoken == null)
+                {
+                    return "invalid token";
+                }
+                foreach (var item in checktoken)
+                {
+                    if (DateTime.Now > item.ResetTokenExpires)
+                    {
+                        return "token has expired";
+                    }
+                    break;
+                }
+                CreatepasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
                 if (user.PasswordHash == passwordHash && user.PasswordSalt == passwordSalt)
                 {
                     _unitOfWork.User.Update(user);
                     _unitOfWork.Complete();
-                    return true;
+                    return "password has been reset";
                 }
-                return false;
+                return "could notr reset password";
             }
             catch (Exception ex)
             {
@@ -86,7 +100,7 @@ namespace E_WalletApp.CORE.Core
                 _logger.Warn($"{ex.GetObjectData}");
                 _logger.Fatal($"{ex.GetHashCode}");
             }
-            return false;
+            return null;
         }
         public async Task<string> Login(string email, string password)
         {
@@ -117,6 +131,35 @@ namespace E_WalletApp.CORE.Core
             }
             return null;
         }
+        public async Task<bool> VerifyUser(string token)
+        {
+            try
+            {
+                var user = await _unitOfWork.User.FindByCondition(u => u.VerificationToken == token);
+                if (user == null)
+                {
+                    return false;
+                }
+                foreach (var item in user)
+                {
+                    item.VerifiedAt = DateTime.Now;
+                    item.IsVerified = true;
+                }
+                _unitOfWork.Complete();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                return false;
+            }
+        }
         public async Task<string> Generatetoken(string email, string role)
         {
             try
@@ -129,12 +172,13 @@ namespace E_WalletApp.CORE.Core
             {
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Role, role.ToLower() ),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
                 var token = new JwtSecurityToken(
                     claims: myclaims,
-                    expires: DateTime.Now.AddMinutes(15),
+                    expires: DateTime.Now.AddMinutes(30),
                     signingCredentials: credentials);
-                var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+                var jwt = new JwtSecurityTokenHandler().WriteToken(token); 
                 return jwt;
             }
             catch (Exception ex)

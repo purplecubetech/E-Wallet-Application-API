@@ -1,6 +1,7 @@
 ﻿using E_Wallet_App.Core.Interface;
 using E_Wallet_App.Entity.Dtos;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 
@@ -9,39 +10,61 @@ namespace EmailService.Service
     public class EmailSender: IESender
     {
         private readonly EmailConfiguration _emailConfig;
-        public EmailSender(EmailConfiguration emailConfig)
+        private readonly ILoggerManager _logger;
+
+        public EmailSender(EmailConfiguration emailConfig, ILoggerManager logger)
         {
             _emailConfig = emailConfig;
+            _logger = logger;
         }
         public async Task SendEmailAsync(EmailDto emailDto)
         {
-            var emailMessage = CreateEmailMessage(emailDto);
+            var emailMessage = await CreateEmailMessage(emailDto);
             await SendAsync(emailMessage);
         }
 
-        private MimeMessage CreateEmailMessage(EmailDto emailDto)
+        private async Task<MimeMessage> CreateEmailMessage(EmailDto emailDto)
         {
-            var emailMessage = new MimeMessage();
-            emailMessage.From.Add(MailboxAddress.Parse(_emailConfig.From));
-            emailMessage.To.Add(MailboxAddress.Parse(emailDto.To));
-            emailMessage.Subject = emailDto.Subject;
-            //emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format("<h2 style='color:red;'>{0}</h2>", emailDto.Body) };
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h2 style='color:red;'>{0}</h2>", emailDto.Body) };
-            if (emailDto.Attachment != null && emailDto.Attachment.Any())
+            try
             {
-                byte[] fileBytes;
-                foreach (var attachment in emailDto.Attachment)
+                var emailMessage = new MimeMessage();
+                emailMessage.From.Add(MailboxAddress.Parse(_emailConfig.UserName));
+                emailMessage.To.Add(MailboxAddress.Parse(emailDto.To));
+                emailMessage.Subject = emailDto.Subject;
+                //emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format("<h2 style='color:red;'>{0}</h2>", emailDto.Body) };
+                var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h2 style='color:red;'>{0}</h2>", emailDto.Body) };
+                if (emailDto.Attachment != null && emailDto.Attachment.Any())
                 {
-                    using (var memorystream = new MemoryStream())
+                    byte[] fileBytes;
+                    foreach (var attachment in emailDto.Attachment)
                     {
-                        attachment.CopyTo(memorystream);
-                        fileBytes = memorystream.ToArray();
+                        using (var memorystream = new MemoryStream())
+                        {
+                            attachment.CopyTo(memorystream);
+                            fileBytes = memorystream.ToArray();
+                        }
+                        bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
                     }
-                    bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
                 }
+                emailMessage.Body = bodyBuilder.ToMessageBody();
+                using var smtp = new SmtpClient();
+                smtp.Connect(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.StartTls);
+                smtp.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+                await smtp.SendAsync(emailMessage);
+                smtp.Disconnect(true);
+                return emailMessage;
             }
-            emailMessage.Body = bodyBuilder.ToMessageBody();
-            return emailMessage;
+            catch(Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                _logger.Equals($"{ex.TargetSite}");
+                return null;
+            }
         }
         private async Task SendAsync(MimeMessage mailMessage)
         {
@@ -55,10 +78,16 @@ namespace EmailService.Service
 
                     await client.SendAsync(mailMessage);
                 }
-                catch
+                catch(Exception ex)
                 {
-                    //log an error message or throw an exception or both.
-                    throw;
+                    _logger.Debug($"{ex.Message}");
+                    _logger.Debug($"{ex.StackTrace}");
+                    _logger.Error($"{ex.InnerException}");
+                    _logger.Info($"{ex.GetBaseException}");
+                    _logger.Warn($"{ex.GetObjectData}");
+                    _logger.Fatal($"{ex.GetHashCode}");
+                    _logger.Equals($"{ex.TargetSite}");
+                    
                 }
                 finally
                 {

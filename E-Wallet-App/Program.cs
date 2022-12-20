@@ -38,11 +38,11 @@ builder.Services.AddScoped<ITransLogic, TransLogic>();
 builder.Services.AddScoped<IESender, EmailSender>();
 builder.Services.AddScoped<ITransService, TransService>();
 builder.Services.AddDbContextPool<ApplicationContext>(options => options.UseSqlite("Data source =E-WalletDatabase"));
-//var emailconfig = builder.Configuration
-//   .GetSection("EmailCOnfiguration")
-//   .Get<EmailConfiguration>();
-//builder.Services.AddSingleton(emailconfig);
-builder.Services.AddSingleton(builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+var emailconfig = builder.Configuration
+   .GetSection("EmailCOnfiguration")
+   .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailconfig);
+//builder.Services.AddSingleton(builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
 builder.Services.AddSwaggerGen(options => {
 
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme

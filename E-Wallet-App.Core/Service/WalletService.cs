@@ -1,11 +1,15 @@
 ﻿using E_Wallet_App.Core.Interface;
+using E_Wallet_App.Domain.Dtos;
 using E_Wallet_App.Domain.Models;
+using E_Wallet_App.Entity.Dtos;
+using E_Wallet_App.Entity.Helper;
 using E_WalletApp.CORE.Interface.RepoInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace E_Wallet_App.Core.Service
 {
@@ -21,7 +25,7 @@ namespace E_Wallet_App.Core.Service
             _unitOfWork = unitOfWork;
             _walletLogic = walletLogic;
         }
-        public async Task<Wallet> GetWalledById(string walletid)
+        public async Task<Wallet> GetWalledByIdAsync(string walletid)
         {
             try
             {
@@ -50,6 +54,122 @@ namespace E_Wallet_App.Core.Service
                 _logger.Fatal($"{ex.GetHashCode}");
             }
             return null;
+        }
+        public async Task<PageList<GetWalletDto>> GetAllWalletAsync(PaginationParameter pagin)
+        {
+            try
+            {
+                var wallets = await _unitOfWork.Wallet.GetAll() ;
+                var walletlist = new List<GetWalletDto>();
+                if (wallets != null)
+                {
+                   foreach(var wallet in wallets)
+                    {
+                        var walletdto = new GetWalletDto();
+
+                        walletdto.WalletId = wallet.WalletId;
+                        walletdto.Balance = wallet.Balance;
+                        walletdto.IsActive = wallet.IsActive;
+                        walletdto.Date = wallet.Date;
+                        walletlist.Add(walletdto);
+                    }
+                    return PageList<GetWalletDto>.ToPageList(walletlist, pagin.PageNumber, pagin.PageSize);
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+            }
+            return null;
+        }
+        public async Task<PageList<GetWalletDto>> GetAllActiveWalletAsync(PaginationParameter pagin)
+        {
+            try
+            {
+                var wallets = await _unitOfWork.Wallet.FindByCondition(x => x.IsActive == true);
+                var walletlist = new List<GetWalletDto>();
+                if (wallets != null)
+                {
+                    foreach (var wallet in wallets)
+                    {
+                        var walletdto = new GetWalletDto();
+                        walletdto.WalletId = wallet.WalletId;
+                        walletdto.Balance = wallet.Balance;
+                        walletdto.IsActive = wallet.IsActive;
+                        walletdto.Date = wallet.Date;
+                        walletlist.Add(walletdto);
+
+                    }
+                    return  PageList<GetWalletDto>.ToPageList(walletlist, pagin.PageNumber, pagin.PageSize);
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+            }
+            return null;
+        }
+        public async Task<bool> DeactivateWalletAsync(string walletid)
+        {
+            try
+            {
+                var wallet = await GetWalledByIdAsync(walletid);
+                if (wallet == null)
+                {
+                    return false;
+                }
+                wallet.IsActive = false;
+                _unitOfWork.Wallet.Update(wallet);
+                _unitOfWork.Complete();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+            }
+            return false;
+        }
+        public async Task<bool> ActivateWalletAsync(string walletid)
+        {
+            try
+            {
+                var wallet = await GetWalledByIdAsync(walletid);
+                if (wallet == null)
+                {
+                    return false;
+                }
+                wallet.IsActive = true;
+                _unitOfWork.Wallet.Update( wallet );
+                _unitOfWork.Complete();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+            }
+            return false;
         }
 
     }

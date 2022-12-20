@@ -1,12 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "+6rdFAZA7AScs0X+xv0ZNsbdwsBSnixBL3tgm3cLcak2rPNFq9pDgihOCHDRvRI5zw2+3Brfrj2ZtYX0WHXl0A==",
+  "dgSpecHash": "ik6w/80IwO9QhPWci/+wCLcVQeBzdaJ01jCPvEaeOCY+pLCCqeykUjjmzHmgM4Ngy4yqrqZsPsElAwMPDaR1zg==",
   "success": true,
   "projectFilePath": "C:\\Users\\HP\\source\\repos\\E-Wallet-App\\E-Wallet-Application-API\\E-Wallet-App.Entity\\E-Wallet-App.Entity.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
-    "C:\\Users\\HP\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
+    "C:\\Users\\HP\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.12\\microsoft.windowsdesktop.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.12\\microsoft.netcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.12\\microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512"
   ],
   "logs": []
 }

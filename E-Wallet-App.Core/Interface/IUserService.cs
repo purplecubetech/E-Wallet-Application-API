@@ -14,6 +14,7 @@ namespace E_WalletApp.CORE.Interface
     {
         Task<User> GetByEmail(string email);
         Task<GetUserDto> GetUserById(Guid id);
+        //void DeleteAll(IEnumerable<User> users, IEnumerable<Wallet> wallets, IEnumerable<Transaction> transactions);
         Task<PageList<GetUserDto>> GetAllUser(PaginationParameter pagin);
         Task<User> RegisterUser(Register register);
     }

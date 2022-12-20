@@ -15,13 +15,13 @@ namespace E_Wallet_App.Controllers
         private readonly IESender _emailSender;
         private readonly ILoggerManager _logger;
 
-        public EmailController(IESender emailSender, ILoggerManager logger)
+        public EmailController([FromForm]IESender emailSender, ILoggerManager logger)
         {
             _emailSender = emailSender;
             _logger = logger;
         }
         [HttpPost("Send-Email")]
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
 
         public async Task<IActionResult> SendMail([FromForm]EmailDto emailDto)
         {

@@ -1,4 +1,5 @@
 ﻿using E_Wallet_App.Core.Interface;
+using E_Wallet_App.Core.Service;
 using E_Wallet_App.Domain.Dtos;
 using E_Wallet_App.Domain.Models;
 using E_Wallet_App.Entity.Dtos;
@@ -7,6 +8,7 @@ using E_WalletApp.CORE.Core;
 using E_WalletApp.CORE.Interface;
 using E_WalletApp.CORE.Interface.RepoInterface;
 using E_WalletRepository.Repository;
+using EmailService.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,22 +24,21 @@ namespace E_Wallet_App.Controllers
 
         private readonly IUserService _userService;
         private readonly ILoggerManager _logger;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IUserLogic _userLogic;
+        private readonly IESender _eSender;
         private readonly IWalletService _walletService;
 
-        public UserController(IUserService userService, ILoggerManager logger, IWalletService walletService, IUnitOfWork unitOfWork, IUserLogic userLogic)
+        public UserController(IUserService userService, ILoggerManager logger, IWalletService walletService, IUserLogic userLogic, IESender eSender)
         {
             _userService = userService;
             _logger = logger;
-            _unitOfWork = unitOfWork;
             _userLogic = userLogic;
+            _eSender = eSender;
             _walletService = walletService;
         }
         [HttpPost("RegisterUser")]
         public async Task<ActionResult<Register>> RegisterUser([FromForm] Register register)
         {
-            //var userName = new UserDto();
             try
             {
                 var user = await _userService.GetByEmail(register.EmailAddress);
@@ -73,17 +74,12 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = await _unitOfWork.User.FindByCondition(u => u.VerificationToken == token);
-                if (user == null)
+                var check = await _userLogic.VerifyUser(token);
+                if (!check)
                 {
                     return BadRequest("user not verified");
                 }
-                foreach (var item in user)
-                {
-                    item.VerifiedAt = DateTime.Now;
-                }
-                _unitOfWork.Complete();
-
+                
                 return Ok("user verified");
             }
             catch (Exception ex)
@@ -122,7 +118,7 @@ namespace E_Wallet_App.Controllers
             }
         }
         [HttpGet("GetAllUser")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
 
         public async Task<ActionResult> GetAllUser([FromQuery]PaginationParameter pagin)
         {
@@ -179,7 +175,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var userwithId= await _walletService.GetWalledById(walletId);
+                var userwithId= await _walletService.GetWalledByIdAsync(walletId);
                 if (userwithId == null)
                 {
                     return NotFound("user not found");
@@ -209,6 +205,8 @@ namespace E_Wallet_App.Controllers
                     return BadRequest("your email does not exist");
                 }
                 await _userLogic.ForgetPassword(email);
+                var emailmsg = new EmailDto(email, "RESET PASSWORD", $"use this link to reset your password https://localhost:44396/api/User/ForGotPassword?={user.PasswordResetToken}");
+                await _eSender.SendEmailAsync(emailmsg);
                 return Ok($"use this token {user.PasswordResetToken} to reset your password");
             }
             catch(Exception ex)
@@ -222,36 +220,15 @@ namespace E_Wallet_App.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet("getTrans")]
-        public async Task<IActionResult> Getall()
-        {
-            //IUnitOfWork unitOfWork = new IUnitOfWork();
-            var wallet = _unitOfWork.Wallet.GetAll();
-            return Ok( wallet );
-        }
+       
         [HttpPut("ResetPassword")]
         //UPDATE USER PASSWORD
         public async Task<ActionResult<string>> ResetPassword([FromForm] ResetPasswordRequest request)
         {
             try
-            {
-                var user = await _unitOfWork.User.FindByCondition(u => u.PasswordResetToken == request.Token);
-                bool check = true;
-                if(user == null)
-                {
-                    return NotFound("wrong token");
-                    check= false;
-                }
-                foreach (var item in user)
-                {
-                    if (DateTime.Now > item.ResetTokenExpires)
-                    {
-                            return BadRequest("token has expired");
-                    }
-                    break;
-                }
-                var result =await _userLogic.ResetPassword(request.email, request.Password);
-                if (!result)
+            {   
+                var result =await _userLogic.ResetPassword(request);
+                if (result == null)
                 {
                     return StatusCode(500, "password could not be reset");
                 }
@@ -270,5 +247,119 @@ namespace E_Wallet_App.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPatch("Deactivate-Wallet")]
+        public async Task<ActionResult<string>> DeactivateWallet(string walletid)
+        {
+            try 
+            {
+                var status = await _walletService.DeactivateWalletAsync(walletid);
+                if (status)
+                {
+                    return Ok($"wallet with with ID {walletid} has been deactivared");
+                }
+                return BadRequest("wallet not deactivated");
+            }  
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                _logger.Equals($"{ex.TargetSite}");
+            }
+            return StatusCode(500, "process could not be completed");
+
+        }
+        [HttpPatch("Activate-Wallet")]
+        public async Task<ActionResult<string>> ActivateWallet(string walletid)
+        {
+            try
+            {
+                var status = await _walletService.ActivateWalletAsync(walletid);
+                if (status)
+                {
+                    return Ok($"wallet with with ID {walletid} has been activared");
+                }
+                return BadRequest("wallet not activated");
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                _logger.Equals($"{ex.TargetSite}");
+            }
+            return StatusCode(500, "process could not be completed");
+
+        }
+        [HttpGet("Get-All-Wallet")]
+        public async Task<ActionResult<string>> GetAllWallets([FromQuery] PaginationParameter pagin)
+        {
+            try
+            {
+                var allwallets = await _walletService.GetAllWalletAsync(pagin) ;
+                if (allwallets != null)
+                {
+                    return Ok(allwallets);
+                }
+                return BadRequest("wallets not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                _logger.Equals($"{ex.TargetSite}");
+            }
+            return StatusCode(500, "process could not be completed");
+
+        }
+        [HttpGet("Get-All-Active-Wallet")]
+        public async Task<ActionResult<string>> GetAllActiveWallets([FromQuery] PaginationParameter pagin)
+        {
+            try
+            {
+                var allwallets = await _walletService.GetAllActiveWalletAsync(pagin);
+                if (allwallets != null)
+                {
+                    return Ok(allwallets);
+                }
+                return BadRequest("wallets not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug($"{ex.Message}");
+                _logger.Debug($"{ex.StackTrace}");
+                _logger.Error($"{ex.InnerException}");
+                _logger.Info($"{ex.GetBaseException}");
+                _logger.Warn($"{ex.GetObjectData}");
+                _logger.Fatal($"{ex.GetHashCode}");
+                _logger.Equals($"{ex.TargetSite}");
+            }
+            return StatusCode(500, "process could not be completed");
+
+        }
+        //[HttpDelete]
+        //public async Task<ActionResult<string>> EmptyDatabase(IEnumerable<User> users, IEnumerable<Wallet> wallets, IEnumerable<Transaction> transactions)
+        //{
+        //    try
+        //    {
+        //          _userService.DeleteAll(users, wallets, transactions);
+
+        //        return Ok("database clared");
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
     }
 }

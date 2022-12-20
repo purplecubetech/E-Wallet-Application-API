@@ -40,7 +40,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = await _walletService.GetWalledById(transDto.WalletId);
+                var user = await _walletService.GetWalledByIdAsync(transDto.WalletId);
                 if (user == null)
                 {
                     return BadRequest($"{transDto.WalletId} does not already exixts");
@@ -71,7 +71,7 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user = await _walletService.GetWalledById(transDto.WalletId);
+                var user = await _walletService.GetWalledByIdAsync(transDto.WalletId);
                 if (user == null)
                 {
                     return BadRequest($"{transDto.WalletId} does not already exixts");
@@ -102,8 +102,8 @@ namespace E_Wallet_App.Controllers
         {
             try
             {
-                var user1 = await _walletService.GetWalledById(transferDto.FromWallet);
-                var user2 = await _walletService.GetWalledById(transferDto.ToWallet);
+                var user1 = await _walletService.GetWalledByIdAsync(transferDto.FromWallet);
+                var user2 = await _walletService.GetWalledByIdAsync(transferDto.ToWallet);
                 if (user1 == null)
                 {
                     return BadRequest($"{transferDto.FromWallet} does not exixts");
@@ -132,7 +132,7 @@ namespace E_Wallet_App.Controllers
             }
         }
         [HttpGet("GetAllTransactions")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
 
         public async Task<ActionResult> GetAllTransactions([FromQuery]PaginationParameter pagin)
         {
@@ -157,13 +157,13 @@ namespace E_Wallet_App.Controllers
             }
         }
         [HttpGet("GetTransactionByWalletId")]
-        [Authorize(Roles = "user")]
+        //[Authorize(Roles = "user")]
 
-        public async Task<ActionResult> GetTransByWalletId([FromQuery] string walletId, PaginationParameter pagin)
+        public async Task<ActionResult> GetTransByWalletId(string walletId, [FromQuery] PaginationParameter pagin)
         {
             try
             {
-                var transwithId = await _walletService.GetWalledById(walletId);
+                var transwithId = await _walletService.GetWalledByIdAsync(walletId);
                 if (transwithId == null)
                 {
                     return NotFound("wallet nnot found");

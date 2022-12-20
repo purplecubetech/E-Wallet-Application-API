@@ -19,6 +19,8 @@ namespace E_Wallet_App.Domain.Models
             public double Balance { get; set; }
             [Required]
             public DateTime Date { get; set; }
+            public bool IsActive { get; set; } = true;
+            public ICollection<Transaction> Transactions { get; set; }
             [ForeignKey(nameof(User))]
             public Guid UserId { get; set; }
             public User User { get; set; }  

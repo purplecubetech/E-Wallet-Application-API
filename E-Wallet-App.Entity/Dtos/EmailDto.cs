@@ -12,11 +12,17 @@ namespace E_Wallet_App.Entity.Dtos
     {
         [Required]
         public string To { get; set; }
-        [Required]
         public string Subject { get; set; }
         [Required]
         public string Body { get; set; }
-        [Required]
         public IFormFileCollection Attachment { get; set; }
+
+        public EmailDto(string to, string subject, string body)
+        {
+            To = to;
+            Subject = subject;
+            Body = body;
+            //Attachment = attachment;
+        }
     }
 }
