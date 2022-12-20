@@ -8,22 +8,13 @@ using System.Threading.Tasks;
 
 namespace E_Wallet_App.Entity.Dtos
 {
-    public class EmailDto
+    public class EmailRequest
     {
         [Required]
         public string To { get; set; }
-        [Required]
         public string Subject { get; set; }
         [Required]
         public string Body { get; set; }
         public IFormFileCollection Attachment { get; set; }
-
-        public EmailDto(string to, string subject, string body, IFormFileCollection attachment)
-        {
-            To = to;
-            Subject = subject;
-            Body = body;
-            Attachment = attachment;
-        }
     }
 }

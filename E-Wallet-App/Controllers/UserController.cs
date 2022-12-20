@@ -205,7 +205,7 @@ namespace E_Wallet_App.Controllers
                     return BadRequest("your email does not exist");
                 }
                 await _userLogic.ForgetPassword(email);
-                var emailmsg = new EmailDto(email, "RESET PASSWORD", $"use this link to reset your password https://localhost:44396/api/User/ForGotPassword?={user.PasswordResetToken}");
+                var emailmsg = new EmailDto(email, "RESET PASSWORD", $"use this link to reset your password https://localhost:44396/api/User/ForGotPassword?={user.PasswordResetToken}", null);
                 await _eSender.SendEmailAsync(emailmsg);
                 return Ok($"use this token {user.PasswordResetToken} to reset your password");
             }
@@ -280,9 +280,9 @@ namespace E_Wallet_App.Controllers
                 var status = await _walletService.ActivateWalletAsync(walletid);
                 if (status)
                 {
-                    return Ok($"wallet with with ID {walletid} has been activared");
+                    return Ok($"wallet with with ID {walletid} has been deactivared");
                 }
-                return BadRequest("wallet not activated");
+                return BadRequest("wallet not deactivated");
             }
             catch (Exception ex)
             {

@@ -23,10 +23,11 @@ namespace E_Wallet_App.Controllers
         [HttpPost("Send-Email")]
        // [Authorize(Roles = "admin")]
 
-        public async Task<IActionResult> SendMail([FromForm]EmailDto emailDto)
+        public async Task<IActionResult> SendMail([FromForm] EmailRequest emailRequest)
         {
             try
             {
+               var emailDto = new EmailDto(emailRequest.To, emailRequest.Subject, emailRequest.Body, emailRequest.Attachment);
                await  _emailSender.SendEmailAsync(emailDto);
                 return Ok();
             }

@@ -72,11 +72,13 @@ namespace E_Wallet_App.Core.Core
         {
             try
             {
-                bool check = true;
-                bool balcheck = false;
                 var wallet = await _walletService.GetWalledByIdAsync(transDto.WalletId);
                 if (wallet != null)
                 {
+                    if(wallet.IsActive == false)
+                    {
+                        return false;
+                    }
                     if (wallet.Balance < transDto.amount)
                     {
                         return false;
@@ -120,6 +122,10 @@ namespace E_Wallet_App.Core.Core
                 var toWallet = await _walletService.GetWalledByIdAsync(transferDto.ToWallet);
                 if (fromWallet != null && toWallet != null)
                 {
+                    if(fromWallet.IsActive == false)
+                    {
+                        return false;
+                    }
                     if (fromWallet.Balance < transferDto.Amount)
                     {
                         return false;

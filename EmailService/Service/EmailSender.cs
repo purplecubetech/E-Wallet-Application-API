@@ -31,7 +31,10 @@ namespace EmailService.Service
                 emailMessage.From.Add(MailboxAddress.Parse(_emailConfig.UserName));
                 emailMessage.To.Add(MailboxAddress.Parse(emailDto.To));
                 emailMessage.Subject = emailDto.Subject;
+                //for text format
                 //emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = string.Format("<h2 style='color:red;'>{0}</h2>", emailDto.Body) };
+                
+                //for html messages format
                 var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h2 style='color:red;'>{0}</h2>", emailDto.Body) };
                 if (emailDto.Attachment != null && emailDto.Attachment.Any())
                 {
@@ -52,6 +55,7 @@ namespace EmailService.Service
                 smtp.Authenticate(_emailConfig.UserName, _emailConfig.Password);
                 await smtp.SendAsync(emailMessage);
                 smtp.Disconnect(true);
+                //smtp.Dispose();
                 return emailMessage;
             }
             catch(Exception ex)
